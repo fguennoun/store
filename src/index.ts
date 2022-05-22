@@ -6,6 +6,8 @@ import errorMiddleware from './middleware/error.middleware';
 import config from './config';
 import db from './database';
 
+import routes from './routes';
+
 const PORT = config.port || 3000;
 
 // create instance server
@@ -19,16 +21,18 @@ app.use(helmet());
 // middleware to apply the rate limmiting to all requests
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 2,
+  max: 5,
   standardHeaders: true,
   legacyHeaders: false,
   message: 'Too many requests',
 });
 app.use(limiter);
 
+app.use('/api', routes);
+
 // add routing for / path
 app.get('/', (req: Request, res: Response) => {
-  throw new Error('Error existe');
+  // throw new Error('Error exist');
   res.json({
     message: 'Hello World',
   });
